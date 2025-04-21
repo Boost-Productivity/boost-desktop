@@ -6,17 +6,8 @@ module.exports = {
     asar: true,
     appBundleId: 'com.boost-productivity.todo',
     appCategoryType: 'public.app-category.productivity',
-    osxSign: {
-      identity: process.env.APPLE_IDENTITY, // Set this environment variable with your Developer ID
-      'hardened-runtime': true,
-      entitlements: 'entitlements.plist',
-      'entitlements-inherit': 'entitlements.plist'
-    },
-    osxNotarize: process.env.APPLE_ID ? {
-      appleId: process.env.APPLE_ID,
-      appleIdPassword: process.env.APPLE_PASSWORD,
-      teamId: process.env.APPLE_TEAM_ID
-    } : undefined
+    osxSign: false,
+    osxNotarize: false
   },
   rebuildConfig: {},
   makers: [
@@ -28,10 +19,20 @@ module.exports = {
     },
     {
       name: '@electron-forge/maker-zip',
-      platforms: ['darwin', 'win32', 'linux']
+      platforms: ['darwin']
+    },
+    {
+      name: '@electron-forge/maker-dmg',
+      config: {
+        name: 'Boost Todo'
+      }
     },
     {
       name: '@electron-forge/maker-deb',
+      config: {}
+    },
+    {
+      name: '@electron-forge/maker-rpm',
       config: {}
     }
   ],

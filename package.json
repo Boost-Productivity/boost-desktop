@@ -1,6 +1,6 @@
 {
   "name": "boost-desktop",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Simple desktop to-do list application",
   "main": "dist/main.js",
   "scripts": {
@@ -10,7 +10,13 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "publish": "electron-forge publish"
+    "make:all": "webpack --mode production && electron-forge make --platform=darwin,win32,linux",
+    "make:mac": "webpack --mode production && electron-forge make --platform=darwin",
+    "make:win": "webpack --mode production && electron-forge make --platform=win32",
+    "make:linux": "webpack --mode production && electron-forge make --platform=linux",
+    "publish": "electron-forge publish",
+    "create-dmg": "electron-installer-dmg ./out/boost-desktop-darwin-arm64/boost-desktop.app 'Boost Todo' --icon=./assets/icon.icns --background=./assets/dmg-background.png --overwrite --out=./release",
+    "build-all": "npm run build && npm run package && npm run make:win && npm run make:linux && npm run create-dmg"
   },
   "keywords": [],
   "author": "",
@@ -34,12 +40,14 @@
     "@electron-forge/cli": "^7.8.0",
     "@electron-forge/maker-deb": "^7.8.0",
     "@electron-forge/maker-dmg": "^7.8.0",
+    "@electron-forge/maker-rpm": "^7.8.0",
     "@electron-forge/maker-squirrel": "^7.8.0",
     "@electron-forge/maker-zip": "^7.8.0",
     "@electron-forge/plugin-auto-unpack-natives": "^7.8.0",
     "@electron-forge/plugin-fuses": "^7.8.0",
     "@electron-forge/publisher-github": "^7.8.0",
     "@electron/fuses": "^1.8.0",
+    "appdmg": "^0.6.6",
     "concurrently": "^9.1.2",
     "copy-webpack-plugin": "^13.0.0",
     "cross-env": "^7.0.3",
@@ -53,26 +61,5 @@
     "wait-on": "^8.0.3",
     "webpack": "^5.99.5",
     "webpack-cli": "^6.0.1"
-  },
-  "build": {
-    "appId": "com.example.boost-desktop",
-    "productName": "Boost Todo",
-    "directories": {
-      "output": "release"
-    },
-    "files": [
-      "dist/**/*",
-      "package.json"
-    ],
-    "mac": {
-      "category": "public.app-category.productivity"
-    },
-    "win": {
-      "target": "nsis"
-    },
-    "linux": {
-      "target": "AppImage",
-      "category": "Office"
-    }
   }
 }
