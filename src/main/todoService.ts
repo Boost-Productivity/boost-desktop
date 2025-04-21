@@ -8,6 +8,9 @@ interface Todo {
     text: string;
     completed: boolean;
     createdAt: string;
+    deadline?: string;
+    archived: boolean;
+    focused: boolean;
 }
 
 // Define schema for TypeScript
@@ -39,13 +42,16 @@ export const setupTodoIPC = () => {
     });
 
     // Add a new todo
-    ipcMain.handle('addTodo', async (_, text: string) => {
+    ipcMain.handle('addTodo', async (_, text: string, deadline?: string) => {
         const todos = store.get('todos');
         const newTodo: Todo = {
             id: uuidv4(),
             text,
             completed: false,
             createdAt: new Date().toISOString(),
+            deadline,
+            archived: false,
+            focused: false
         };
 
         const updatedTodos = [...todos, newTodo];
@@ -85,5 +91,145 @@ export const setupTodoIPC = () => {
 
         store.set('todos', updatedTodos);
         return id;
+    });
+
+    // Archive a todo
+    ipcMain.handle('archiveTodo', async (_, id: string) => {
+        const todos = store.get('todos');
+        const todoIndex = todos.findIndex((todo: Todo) => todo.id === id);
+
+        if (todoIndex !== -1) {
+            const updatedTodo = {
+                ...todos[todoIndex],
+                archived: true
+            };
+
+            const updatedTodos = [
+                ...todos.slice(0, todoIndex),
+                updatedTodo,
+                ...todos.slice(todoIndex + 1),
+            ];
+
+            store.set('todos', updatedTodos);
+            return updatedTodo;
+        }
+
+        throw new Error('Todo not found');
+    });
+
+    // Unarchive a todo
+    ipcMain.handle('unarchiveTodo', async (_, id: string) => {
+        const todos = store.get('todos');
+        const todoIndex = todos.findIndex((todo: Todo) => todo.id === id);
+
+        if (todoIndex !== -1) {
+            const updatedTodo = {
+                ...todos[todoIndex],
+                archived: false
+            };
+
+            const updatedTodos = [
+                ...todos.slice(0, todoIndex),
+                updatedTodo,
+                ...todos.slice(todoIndex + 1),
+            ];
+
+            store.set('todos', updatedTodos);
+            return updatedTodo;
+        }
+
+        throw new Error('Todo not found');
+    });
+
+    // Edit a todo's text and deadline
+    ipcMain.handle('editTodo', async (_, id: string, text: string, deadline?: string) => {
+        const todos = store.get('todos');
+        const todoIndex = todos.findIndex((todo: Todo) => todo.id === id);
+
+        if (todoIndex === -1) {
+            throw new Error('Todo not found');
+        }
+
+        // Create updated todo with new text and deadline
+        const updatedTodo = {
+            ...todos[todoIndex],
+            text: text.trim(),
+            deadline: deadline
+        };
+
+        const updatedTodos = [
+            ...todos.slice(0, todoIndex),
+            updatedTodo,
+            ...todos.slice(todoIndex + 1),
+        ];
+
+        store.set('todos', updatedTodos);
+        return updatedTodo;
+    });
+
+    // Toggle focus state of a todo
+    ipcMain.handle('toggleFocus', async (_, id: string) => {
+        const todos = store.get('todos');
+        const todoIndex = todos.findIndex((todo: Todo) => todo.id === id);
+
+        if (todoIndex === -1) {
+            throw new Error('Todo not found');
+        }
+
+        const todoToUpdate = todos[todoIndex];
+
+        // Simply toggle the focus state of this specific todo
+        const updatedTodo = {
+            ...todoToUpdate,
+            focused: !todoToUpdate.focused
+        };
+
+        // Update todos array
+        const updatedTodos = [
+            ...todos.slice(0, todoIndex),
+            updatedTodo,
+            ...todos.slice(todoIndex + 1),
+        ];
+
+        // Save the updated todos
+        store.set('todos', updatedTodos);
+
+        // Return the updated todo
+        return updatedTodo;
+    });
+
+    // Set focus on a specific todo (used for focus mode) without affecting other focused todos
+    ipcMain.handle('setFocus', async (_, id: string) => {
+        const todos = store.get('todos');
+        const todoIndex = todos.findIndex((todo: Todo) => todo.id === id);
+
+        if (todoIndex === -1) {
+            throw new Error('Todo not found');
+        }
+
+        // Simply set focus to true for this todo without changing others
+        const updatedTodo = {
+            ...todos[todoIndex],
+            focused: true
+        };
+
+        // Update todos array
+        const updatedTodos = [
+            ...todos.slice(0, todoIndex),
+            updatedTodo,
+            ...todos.slice(todoIndex + 1),
+        ];
+
+        // Save the updated todos
+        store.set('todos', updatedTodos);
+
+        // Return the updated todo
+        return updatedTodo;
+    });
+
+    // Get focused todos
+    ipcMain.handle('getFocusedTodos', async () => {
+        const todos = store.get('todos');
+        return todos.filter((todo: Todo) => todo.focused);
     });
 }; 

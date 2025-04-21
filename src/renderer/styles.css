@@ -34,27 +34,88 @@ h1 {
     color: var(--primary-color);
 }
 
+.app-title {
+    text-align: center;
+    color: var(--primary-color);
+    letter-spacing: -0.08em;
+    margin: 0;
+}
+
 .todo-form {
     display: flex;
     margin-bottom: 20px;
+    align-items: center;
+    gap: 8px;
 }
 
 .todo-input {
     flex: 1;
-    padding: 10px;
+    padding: 8px 12px;
     border: 1px solid #ddd;
-    border-radius: 4px 0 0 4px;
-    font-size: 16px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Deadline Input Styles */
+.deadline-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 120px;
+}
+
+.deadline-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #888;
+    border-radius: 4px;
+    width: 24px;
+    height: 24px;
+    transition: color 0.2s;
+}
+
+.deadline-toggle:hover {
+    color: var(--primary-color);
+}
+
+.deadline-input {
+    padding: 6px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.datetime-input {
+    width: 155px;
+}
+
+.minutes-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.minutes-input {
+    width: 55px;
+    text-align: center;
+}
+
+.minutes-label {
+    color: #888;
+    font-size: 12px;
 }
 
 .todo-button {
-    padding: 10px 15px;
+    padding: 8px 15px;
     background-color: var(--primary-color);
     color: white;
     border: none;
-    border-radius: 0 4px 4px 0;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
+    white-space: nowrap;
 }
 
 .todo-button:hover {
@@ -81,6 +142,29 @@ h1 {
     opacity: 0.7;
 }
 
+.todo-item.overdue {
+    border-left-color: var(--error-color);
+}
+
+.todo-item.focused {
+    border-left-color: #ffc107;
+    background-color: #fffbeb;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.todo-item.focused::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #ffc107;
+    border-radius: 4px;
+    pointer-events: none;
+}
+
 .todo-text {
     flex: 1;
 }
@@ -96,11 +180,34 @@ h1 {
 }
 
 .todo-toggle,
-.todo-delete {
+.todo-delete,
+.todo-archive,
+.todo-unarchive,
+.todo-focus,
+.todo-edit,
+.todo-save,
+.todo-cancel {
     background: none;
     border: none;
     cursor: pointer;
-    font-size: 16px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.todo-toggle:hover,
+.todo-delete:hover,
+.todo-archive:hover,
+.todo-unarchive:hover,
+.todo-focus:hover,
+.todo-edit:hover,
+.todo-save:hover,
+.todo-cancel:hover {
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 .todo-toggle {
@@ -109,4 +216,365 @@ h1 {
 
 .todo-delete {
     color: var(--error-color);
+}
+
+.todo-focus {
+    color: #aaa;
+}
+
+.todo-focus.active,
+.todo-item.focused .todo-focus {
+    color: #ffc107;
+}
+
+.todo-edit {
+    color: #666;
+}
+
+.todo-save {
+    color: var(--success-color);
+}
+
+.todo-cancel {
+    color: var(--error-color);
+}
+
+.todo-archive,
+.todo-unarchive {
+    color: #607d8b;
+}
+
+.todo-unarchive {
+    color: var(--primary-color);
+}
+
+.todo-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.todo-deadline-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.todo-deadline {
+    font-size: 12px;
+    color: #666;
+}
+
+.todo-countdown {
+    font-size: 12px;
+    background-color: #f0f0f0;
+    color: #333;
+    border-radius: 10px;
+    padding: 2px 8px;
+    font-weight: bold;
+}
+
+.todo-item.overdue .todo-deadline {
+    color: var(--error-color);
+    font-weight: bold;
+}
+
+.todo-item.overdue .todo-countdown {
+    background-color: var(--error-color);
+    color: white;
+}
+
+/* View and Sort Controls Container */
+.view-controls,
+.sort-controls {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    background: none;
+    padding: 0;
+}
+
+.view-controls {
+    margin-bottom: 4px;
+}
+
+.view-label,
+.sort-label {
+    font-size: 12px;
+    color: #888;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.view-buttons,
+.sort-buttons {
+    display: flex;
+    gap: 2px;
+    flex-wrap: wrap;
+}
+
+.view-button,
+.sort-button {
+    padding: 3px 8px;
+    font-size: 12px;
+    background: none;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    color: #666;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.view-button:hover,
+.sort-button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.view-button.active,
+.sort-button.active {
+    color: var(--primary-color);
+    font-weight: 500;
+    background: none;
+}
+
+.sort-button svg {
+    font-size: 10px;
+}
+
+/* Combined controls container */
+.list-controls {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+}
+
+@media (min-width: 600px) {
+    .list-controls {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+
+/* Todo Item Archive Styles */
+.todo-item.archived {
+    border-left-color: #9e9e9e;
+    background-color: #f9f9f9;
+    opacity: 0.8;
+}
+
+.todo-archive,
+.todo-unarchive {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #607d8b;
+}
+
+.todo-unarchive {
+    color: var(--primary-color);
+}
+
+/* Todo editing styles */
+.todo-edit-form {
+    display: flex;
+    flex: 1;
+    padding: 5px;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+}
+
+.todo-edit-input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.todo-edit-deadline {
+    width: 180px;
+    padding: 6px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.todo-edit-actions {
+    display: flex;
+    gap: 5px;
+}
+
+@media (max-width: 600px) {
+    .todo-edit-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .todo-edit-deadline {
+        width: 100%;
+    }
+
+    .todo-edit-actions {
+        justify-content: flex-end;
+        margin-top: 5px;
+    }
+}
+
+/* App header with title and focus mode toggle */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* Focus mode toggle button */
+.focus-mode-toggle {
+    background: none;
+    border: none;
+    color: #666;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.focus-mode-toggle:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--primary-color);
+}
+
+/* Focus mode body and html adjustments - remove padding between window and content */
+body.focus-mode {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+html.focus-mode {
+    overflow: hidden;
+}
+
+/* Container in focus mode */
+.container.focus-mode {
+    max-width: 100%;
+    padding: 6px;
+    background-color: #fffdf7;
+    border: none;
+    margin: 0;
+    overflow: auto;
+    height: 100vh;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.container.focus-mode .app-header {
+    margin-bottom: 6px;
+}
+
+.container.focus-mode .app-title {
+    font-size: 18px;
+    margin: 0;
+}
+
+.container.focus-mode .focus-mode-toggle {
+    color: #ffc107;
+    width: 30px;
+    height: 30px;
+}
+
+.container.focus-mode .todo-list {
+    margin-top: 10px;
+}
+
+.container.focus-mode .todo-item {
+    padding: 8px;
+    margin-bottom: 8px;
+    border-left-color: #ffc107;
+    background-color: #fffbeb;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.container.focus-mode .todo-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.container.focus-mode .todo-text {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+}
+
+.container.focus-mode .todo-deadline-container {
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.container.focus-mode .todo-deadline {
+    font-size: 11px;
+    display: inline-block;
+}
+
+.container.focus-mode .todo-countdown {
+    font-size: 11px;
+    padding: 1px 6px;
+    margin-left: 4px;
+}
+
+.container.focus-mode .todo-actions {
+    gap: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.container.focus-mode .todo-actions button {
+    width: 24px;
+    height: 24px;
+}
+
+/* Hide non-essential buttons in focus mode */
+.container.focus-mode .todo-edit,
+.container.focus-mode .todo-archive,
+.container.focus-mode .todo-unarchive {
+    display: none;
+}
+
+/* Compact focus mode for very small screens */
+@media (max-height: 400px),
+(max-width: 400px) {
+    .container.focus-mode .todo-text {
+        max-width: 120px;
+    }
+
+    .container.focus-mode .todo-item {
+        padding: 5px;
+        margin-bottom: 5px;
+    }
+
+    .container.focus-mode .todo-actions {
+        gap: 2px;
+    }
 }

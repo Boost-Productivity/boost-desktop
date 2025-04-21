@@ -5,9 +5,18 @@ declare global {
     interface Window {
         api: {
             getTodos: () => Promise<Todo[]>;
-            addTodo: (text: string) => Promise<Todo>;
+            addTodo: (text: string, deadline?: string) => Promise<Todo>;
             toggleTodo: (id: string) => Promise<Todo>;
             deleteTodo: (id: string) => Promise<string>;
+            archiveTodo: (id: string) => Promise<Todo>;
+            unarchiveTodo: (id: string) => Promise<Todo>;
+            toggleFocus: (id: string) => Promise<Todo>;
+            setFocus: (id: string) => Promise<Todo>;
+            getFocusedTodos: () => Promise<Todo[]>;
+            editTodo: (id: string, text: string, deadline?: string) => Promise<Todo>;
+            enterFocusMode: (contentHeight: number) => Promise<{ success: boolean; error?: string }>;
+            exitFocusMode: () => Promise<{ success: boolean; error?: string }>;
+            updateFocusModeSize: (contentHeight: number) => Promise<{ success: boolean; error?: string; message?: string }>;
         };
     }
 }
@@ -17,8 +26,8 @@ export class StorageService {
         return await window.api.getTodos();
     }
 
-    async addTodo(text: string): Promise<Todo> {
-        return await window.api.addTodo(text);
+    async addTodo(text: string, deadline?: string): Promise<Todo> {
+        return await window.api.addTodo(text, deadline);
     }
 
     async toggleTodo(id: string): Promise<Todo> {
@@ -27,6 +36,43 @@ export class StorageService {
 
     async deleteTodo(id: string): Promise<string> {
         return await window.api.deleteTodo(id);
+    }
+
+    async archiveTodo(id: string): Promise<Todo> {
+        return await window.api.archiveTodo(id);
+    }
+
+    async unarchiveTodo(id: string): Promise<Todo> {
+        return await window.api.unarchiveTodo(id);
+    }
+
+    async toggleFocus(id: string): Promise<Todo> {
+        return await window.api.toggleFocus(id);
+    }
+
+    async setFocus(id: string): Promise<Todo> {
+        return await window.api.setFocus(id);
+    }
+
+    async getFocusedTodos(): Promise<Todo[]> {
+        return await window.api.getFocusedTodos();
+    }
+
+    async editTodo(id: string, text: string, deadline?: string): Promise<Todo> {
+        return await window.api.editTodo(id, text, deadline);
+    }
+
+    // Window control methods
+    async enterFocusMode(contentHeight: number): Promise<{ success: boolean; error?: string }> {
+        return await window.api.enterFocusMode(contentHeight);
+    }
+
+    async exitFocusMode(): Promise<{ success: boolean; error?: string }> {
+        return await window.api.exitFocusMode();
+    }
+
+    async updateFocusModeSize(contentHeight: number): Promise<{ success: boolean; error?: string; message?: string }> {
+        return await window.api.updateFocusModeSize(contentHeight);
     }
 }
 
