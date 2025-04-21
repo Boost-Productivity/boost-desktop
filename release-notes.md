@@ -12,4 +12,5 @@
 - Enhanced sorting capabilities (now sorts by deadline)
 - Better visual feedback for todo states
 - Improved task management with archive functionality
-- Fixed packaging issues for macOS distributions 
+- Fixed packaging issues for macOS distributions
+- Added cross-platform support (macOS, Windows, Linux) 
