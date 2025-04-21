@@ -31,12 +31,6 @@ module.exports = {
       platforms: ['darwin']
     },
     {
-      name: '@electron-forge/maker-dmg',
-      config: {
-        name: 'Boost Todo'
-      }
-    },
-    {
       name: '@electron-forge/maker-deb',
       config: {}
     }
