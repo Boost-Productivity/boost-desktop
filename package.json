@@ -1,6 +1,6 @@
 {
   "name": "boost-desktop",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Simple desktop to-do list application",
   "main": "dist/main.js",
   "scripts": {
@@ -71,6 +71,7 @@
       "assets/**/*",
       "package.json"
     ],
+    "afterSign": "./afterSign.js",
     "directories": {
       "output": "release",
       "buildResources": "assets"
@@ -81,7 +82,13 @@
         "dmg",
         "zip"
       ],
-      "icon": "assets/icon.icns"
+      "icon": "assets/icon.icns",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "entitlements.plist",
+      "entitlementsInherit": "entitlements.plist",
+      "notarize": false,
+      "identity": "Jacob Beauchamp (3VTHP9BHH6)"
     },
     "win": {
       "target": [
@@ -100,7 +107,8 @@
     "dmg": {
       "background": "assets/dmg-background.png",
       "icon": "assets/icon.icns",
-      "title": "Install Boost Todo"
+      "title": "Install Boost Todo",
+      "sign": false
     }
   }
 }
