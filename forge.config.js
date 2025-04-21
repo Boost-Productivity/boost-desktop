@@ -7,19 +7,26 @@ module.exports = {
     appBundleId: 'com.boost-productivity.todo',
     appCategoryType: 'public.app-category.productivity',
     osxSign: false,
-    osxNotarize: false
+    osxNotarize: false,
+    // Only include necessary files for the application
+    ignore: [
+      /node_modules\/(.*)\.map/,
+      /node_modules\/(.*)\.md/,
+      /node_modules\/(.*)\/test.*/,
+      /node_modules\/(.*)\/docs.*/,
+      /node_modules\/(.*)\/examples.*/,
+      /\.git.*/,
+      /\.vscode.*/,
+      /\.github.*/,
+      /\.idea.*/,
+      /.*\.log/
+    ]
   },
   rebuildConfig: {},
   makers: [
     {
-      name: '@electron-forge/maker-squirrel',
-      config: {
-        name: 'BoostTodo'
-      }
-    },
-    {
       name: '@electron-forge/maker-zip',
-      platforms: ['darwin']
+      platforms: ['darwin', 'win32', 'linux']
     },
     {
       name: '@electron-forge/maker-dmg',
@@ -30,11 +37,12 @@ module.exports = {
     {
       name: '@electron-forge/maker-deb',
       config: {}
-    },
-    {
-      name: '@electron-forge/maker-rpm',
-      config: {}
     }
+    // Commented out until rpmbuild is installed
+    // {
+    //   name: '@electron-forge/maker-rpm',
+    //   config: {}
+    // }
   ],
   plugins: [
     {

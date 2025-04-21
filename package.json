@@ -1,39 +1,27 @@
 {
   "name": "boost-desktop",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Simple desktop to-do list application",
   "main": "dist/main.js",
   "scripts": {
-    "start": "electron-forge start",
+    "start": "electron .",
     "build": "webpack --mode production",
     "build:watch": "webpack --mode development --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "make:all": "webpack --mode production && electron-forge make --platform=darwin,win32,linux",
-    "make:mac": "webpack --mode production && electron-forge make --platform=darwin",
-    "make:win": "webpack --mode production && electron-forge make --platform=win32",
-    "make:linux": "webpack --mode production && electron-forge make --platform=linux",
-    "publish": "electron-forge publish",
-    "create-dmg": "electron-installer-dmg ./out/boost-desktop-darwin-arm64/boost-desktop.app 'Boost Todo' --icon=./assets/icon.icns --background=./assets/dmg-background.png --overwrite --out=./release",
-    "build-all": "npm run build && npm run package && npm run make:win && npm run make:linux && npm run create-dmg"
+    "postinstall": "electron-builder install-app-deps",
+    "pack": "npm run build && electron-builder --dir",
+    "dist": "npm run build && electron-builder",
+    "dist:mac": "npm run build && electron-builder --mac",
+    "dist:win": "npm run build && electron-builder --win",
+    "dist:linux": "npm run build && electron-builder --linux",
+    "dist:all": "npm run build && electron-builder -mwl"
   },
   "keywords": [],
-  "author": "",
+  "author": "Your Name <your.email@example.com>",
   "license": "ISC",
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^6.7.2",
-    "@fortawesome/free-solid-svg-icons": "^6.7.2",
-    "@fortawesome/react-fontawesome": "^0.2.2",
-    "@types/node": "^22.14.1",
-    "@types/react": "^19.1.2",
-    "@types/react-dom": "^19.1.2",
-    "@types/uuid": "^10.0.0",
     "electron-squirrel-startup": "^1.0.1",
     "electron-store": "^10.0.1",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "typescript": "^5.8.3",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
@@ -47,19 +35,72 @@
     "@electron-forge/plugin-fuses": "^7.8.0",
     "@electron-forge/publisher-github": "^7.8.0",
     "@electron/fuses": "^1.8.0",
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "@types/node": "^22.14.1",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@types/uuid": "^10.0.0",
     "appdmg": "^0.6.6",
     "concurrently": "^9.1.2",
     "copy-webpack-plugin": "^13.0.0",
     "cross-env": "^7.0.3",
     "css-loader": "^7.1.2",
     "electron": "^35.1.5",
+    "electron-builder": "^24.13.1",
     "electron-installer-dmg": "^5.0.1",
     "electron-reload": "^2.0.0-alpha.1",
     "html-webpack-plugin": "^5.6.3",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "style-loader": "^4.0.0",
     "ts-loader": "^9.5.2",
+    "typescript": "^5.8.3",
     "wait-on": "^8.0.3",
     "webpack": "^5.99.5",
     "webpack-cli": "^6.0.1"
+  },
+  "build": {
+    "appId": "com.boost-productivity.todo",
+    "productName": "Boost Todo",
+    "asar": true,
+    "compression": "maximum",
+    "files": [
+      "dist/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "release",
+      "buildResources": "assets"
+    },
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "icon": "assets/icon.icns"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "zip"
+      ],
+      "icon": "assets/icon.ico"
+    },
+    "linux": {
+      "target": [
+        "deb",
+        "AppImage"
+      ],
+      "category": "Utility"
+    },
+    "dmg": {
+      "background": "assets/dmg-background.png",
+      "icon": "assets/icon.icns",
+      "title": "Install Boost Todo"
+    }
   }
 }
