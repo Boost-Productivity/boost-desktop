@@ -1,5 +1,5 @@
 {
-  "name": "boost-productivity",
+  "name": "boost-desktop",
   "version": "1.3.0",
   "description": "Simple desktop to-do list application",
   "main": "dist/main.js",
@@ -68,7 +68,7 @@
     "webpack-cli": "^6.0.1"
   },
   "build": {
-    "appId": "com.boost-productivity.todo",
+    "appId": "com.boost-desktop.todo",
     "productName": "Boost Todo",
     "asar": true,
     "compression": "maximum",

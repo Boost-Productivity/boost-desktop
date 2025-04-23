@@ -26,8 +26,11 @@ const schema = {
     },
 };
 
-// Initialize the store with proper type
-const store = new Store<StoreSchema>({ schema });
+// Initialize the store with proper type and explicit name
+const store = new Store<StoreSchema>({
+    schema,
+    name: 'config' // Explicitly set store name to maintain data compatibility
+});
 
 // Initialize todos if not exist
 if (!store.has('todos')) {
