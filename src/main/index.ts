@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, screen, protocol, net } from 'electron';
+import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import { setupTodoIPC } from './todoService';
@@ -13,63 +13,6 @@ if (require('electron-squirrel-startup')) {
 let mainWindow: BrowserWindow | null = null;
 let originalSize: { width: number; height: number } | null = null;
 let originalPosition: { x: number; y: number } | null = null;
-
-// Register protocol scheme privileges - must be done before app ready
-protocol.registerSchemesAsPrivileged([
-    {
-        scheme: 'video',
-        privileges: {
-            standard: true,
-            supportFetchAPI: true,
-            secure: true,
-            stream: true,
-            bypassCSP: true,
-        }
-    }
-]);
-
-// Register custom protocol handler - called after app ready
-const registerVideoProtocol = () => {
-    // Register our custom protocol using the newer protocol.handle API
-    protocol.handle('video', (request) => {
-        try {
-            // Extract the path from the URL
-            const urlPath = decodeURIComponent(request.url.replace('video://', ''));
-
-            // Make sure the path is absolute
-            let filePath = urlPath;
-            if (!path.isAbsolute(filePath)) {
-                filePath = path.join(app.getPath('userData'), 'uploads', filePath);
-            }
-
-            console.log(`Loading video from: ${filePath}`);
-
-            // Verify file existence
-            if (fs.existsSync(filePath)) {
-                const stats = fs.statSync(filePath);
-                console.log(`Video file exists, size: ${stats.size} bytes, mode: ${stats.mode.toString(8)}`);
-
-                // Verify file is readable
-                try {
-                    fs.accessSync(filePath, fs.constants.R_OK);
-                    console.log('File is readable');
-                } catch (err) {
-                    console.error('File is not readable:', err);
-                    return new Response('File permission denied', { status: 403 });
-                }
-
-                // Use file protocol which is properly handled by Electron
-                return net.fetch(`file://${filePath}`);
-            } else {
-                console.error(`Video file does not exist: ${filePath}`);
-                return new Response('File not found', { status: 404 });
-            }
-        } catch (error) {
-            console.error('Error loading video:', error);
-            return new Response(`Error loading video: ${error}`, { status: 500 });
-        }
-    });
-};
 
 const createWindow = () => {
     // Create the browser window
@@ -273,8 +216,6 @@ console.log('User data path:', app.getPath('userData'));
 setupWindowHandlers();
 
 app.on('ready', () => {
-    // Register custom protocol
-    registerVideoProtocol();
     createWindow();
     debugCheckUploads();
 });

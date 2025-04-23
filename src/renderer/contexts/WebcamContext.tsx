@@ -355,8 +355,7 @@ export const WebcamProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         // Log the path being converted for debugging
         console.log('Converting file path to URL:', filePath);
 
-        // Use file:// protocol directly instead of custom video:// protocol
-        // This works in development mode when webSecurity is disabled in BrowserWindow options
+        // Use file:// protocol directly
         return `file://${filePath}`;
     };
 
