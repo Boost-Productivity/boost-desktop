@@ -27,6 +27,17 @@ const createWindow = () => {
         },
     });
 
+    // Set permission handler for camera and microphone - CRITICAL for packaged apps
+    mainWindow.webContents.session.setPermissionRequestHandler((webContents, permission, callback) => {
+        const allowedPermissions = ['media'];
+        if (allowedPermissions.includes(permission)) {
+            // Always allow camera and microphone
+            callback(true);
+        } else {
+            callback(false);
+        }
+    });
+
     // In production, load the bundled app
     // In development, connect to webpack-dev-server
     const startUrl = url.format({

@@ -449,6 +449,20 @@ export const WebcamProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         }
     };
 
+    // Restart webcam when device selection changes and webcam is active
+    useEffect(() => {
+        const updateWebcamWithNewDevice = async () => {
+            // Only restart if webcam is already active
+            if (isWebcamActive && isStreaming) {
+                console.log('Device selection changed, restarting webcam with new device');
+                await startWebcam();
+            }
+        };
+
+        updateWebcamWithNewDevice();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedVideoDevice, selectedAudioDevice]);
+
     // Initialize webcam and load recordings on component mount
     useEffect(() => {
         // Only load recordings initially, don't start webcam automatically

@@ -71,18 +71,28 @@
     "appId": "com.boost-desktop.todo",
     "productName": "Boost Todo",
     "asar": true,
+    "asarUnpack": [
+      "node_modules/ffmpeg-static/**/*"
+    ],
     "compression": "maximum",
     "files": [
       "dist/**/*",
       "assets/**/*",
       "video-processor/**/*",
-      "package.json"
+      "package.json",
+      "node_modules/ffmpeg-static/**/*"
     ],
     "afterSign": "./afterSign.js",
     "directories": {
       "output": "release",
       "buildResources": "assets"
     },
+    "extraFiles": [
+      {
+        "from": "node_modules/ffmpeg-static/ffmpeg",
+        "to": "ffmpeg"
+      }
+    ],
     "mac": {
       "category": "public.app-category.productivity",
       "target": [
@@ -95,7 +105,11 @@
       "entitlements": "entitlements.plist",
       "entitlementsInherit": "entitlements.plist",
       "notarize": false,
-      "identity": "Jacob Beauchamp (3VTHP9BHH6)"
+      "identity": "Jacob Beauchamp (3VTHP9BHH6)",
+      "extendInfo": {
+        "NSCameraUsageDescription": "This app requires camera access to record video notes.",
+        "NSMicrophoneUsageDescription": "This app requires microphone access to record audio for your notes."
+      }
     },
     "win": {
       "target": [

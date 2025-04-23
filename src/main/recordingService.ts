@@ -6,6 +6,68 @@ import * as fs from 'fs';
 import ffmpeg from 'fluent-ffmpeg';
 import { app } from 'electron';
 
+// Import ffmpeg-static to get the ffmpeg binary path
+import ffmpegStatic from 'ffmpeg-static';
+
+// Log the original ffmpeg path from ffmpeg-static
+console.log('Original ffmpeg path from ffmpeg-static:', ffmpegStatic);
+
+// Helper function to check if a file exists and is executable
+const isExecutable = (filePath: string): boolean => {
+    try {
+        if (!fs.existsSync(filePath)) return false;
+        fs.accessSync(filePath, fs.constants.X_OK);
+        return true;
+    } catch (error) {
+        return false;
+    }
+};
+
+// Set the ffmpeg path for fluent-ffmpeg
+// Start with the path from ffmpeg-static
+let ffmpegPath = ffmpegStatic || '';
+console.log('Initial ffmpeg path:', ffmpegPath);
+
+// Try additional paths if the binary isn't found or isn't executable
+if (!isExecutable(ffmpegPath)) {
+    console.log('ffmpeg not found at initial path, trying alternatives');
+
+    // Array of possible locations to check
+    const possiblePaths = [
+        // If we're in asar, check the unpacked folder
+        ffmpegPath.replace('app.asar', 'app.asar.unpacked'),
+
+        // Check in resources directory
+        path.join(process.resourcesPath || '', 'node_modules', 'ffmpeg-static', ffmpegPath.split('/node_modules/ffmpeg-static')[1] || ''),
+        path.join(process.resourcesPath || '', 'ffmpeg'),
+
+        // Check in app directory
+        path.join(app.getAppPath(), 'node_modules', 'ffmpeg-static', 'ffmpeg'),
+
+        // Check for common global install locations
+        '/usr/local/bin/ffmpeg',
+        '/usr/bin/ffmpeg'
+    ];
+
+    // Find the first executable ffmpeg binary
+    for (const candidatePath of possiblePaths) {
+        console.log('Checking ffmpeg at:', candidatePath);
+        if (isExecutable(candidatePath)) {
+            ffmpegPath = candidatePath;
+            console.log('Found executable ffmpeg at:', ffmpegPath);
+            break;
+        }
+    }
+}
+
+// Set the ffmpeg path if a valid one was found
+if (isExecutable(ffmpegPath)) {
+    console.log('Setting ffmpeg path to:', ffmpegPath);
+    ffmpeg.setFfmpegPath(ffmpegPath);
+} else {
+    console.error('Could not find executable ffmpeg binary. Video conversion will fail.');
+}
+
 // Interface for Recording
 interface Recording {
     id: string;
