@@ -19,6 +19,14 @@ contextBridge.exposeInMainWorld(
     // Window control methods
     enterFocusMode: (contentHeight: number) => ipcRenderer.invoke('enterFocusMode', contentHeight),
     exitFocusMode: () => ipcRenderer.invoke('exitFocusMode'),
-    updateFocusModeSize: (contentHeight: number) => ipcRenderer.invoke('updateFocusModeSize', contentHeight)
+    updateFocusModeSize: (contentHeight: number) => ipcRenderer.invoke('updateFocusModeSize', contentHeight),
+
+    // Recording methods
+    getRecordings: () => ipcRenderer.invoke('getRecordings'),
+    getRecordingPath: (id: string) => ipcRenderer.invoke('getRecordingPath', id),
+    deleteRecording: (id: string) => ipcRenderer.invoke('deleteRecording', id),
+
+    // Native recording methods (replacing Python-based recording)
+    saveRecording: (buffer: Uint8Array, outputFormat?: string) => ipcRenderer.invoke('saveRecording', buffer, outputFormat),
 }
 ); 

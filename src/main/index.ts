@@ -1,7 +1,9 @@
-import { app, BrowserWindow, ipcMain, screen } from 'electron';
+import { app, BrowserWindow, ipcMain, screen, protocol, net } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import { setupTodoIPC } from './todoService';
+import { setupRecordingIPC } from './recordingService';
+import * as fs from 'fs';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling
 if (require('electron-squirrel-startup')) {
@@ -12,6 +14,63 @@ let mainWindow: BrowserWindow | null = null;
 let originalSize: { width: number; height: number } | null = null;
 let originalPosition: { x: number; y: number } | null = null;
 
+// Register protocol scheme privileges - must be done before app ready
+protocol.registerSchemesAsPrivileged([
+    {
+        scheme: 'video',
+        privileges: {
+            standard: true,
+            supportFetchAPI: true,
+            secure: true,
+            stream: true,
+            bypassCSP: true,
+        }
+    }
+]);
+
+// Register custom protocol handler - called after app ready
+const registerVideoProtocol = () => {
+    // Register our custom protocol using the newer protocol.handle API
+    protocol.handle('video', (request) => {
+        try {
+            // Extract the path from the URL
+            const urlPath = decodeURIComponent(request.url.replace('video://', ''));
+
+            // Make sure the path is absolute
+            let filePath = urlPath;
+            if (!path.isAbsolute(filePath)) {
+                filePath = path.join(app.getPath('userData'), 'uploads', filePath);
+            }
+
+            console.log(`Loading video from: ${filePath}`);
+
+            // Verify file existence
+            if (fs.existsSync(filePath)) {
+                const stats = fs.statSync(filePath);
+                console.log(`Video file exists, size: ${stats.size} bytes, mode: ${stats.mode.toString(8)}`);
+
+                // Verify file is readable
+                try {
+                    fs.accessSync(filePath, fs.constants.R_OK);
+                    console.log('File is readable');
+                } catch (err) {
+                    console.error('File is not readable:', err);
+                    return new Response('File permission denied', { status: 403 });
+                }
+
+                // Use file protocol which is properly handled by Electron
+                return net.fetch(`file://${filePath}`);
+            } else {
+                console.error(`Video file does not exist: ${filePath}`);
+                return new Response('File not found', { status: 404 });
+            }
+        } catch (error) {
+            console.error('Error loading video:', error);
+            return new Response(`Error loading video: ${error}`, { status: 500 });
+        }
+    });
+};
+
 const createWindow = () => {
     // Create the browser window
     mainWindow = new BrowserWindow({
@@ -21,6 +80,7 @@ const createWindow = () => {
             nodeIntegration: false,
             contextIsolation: true,
             preload: path.join(__dirname, 'preload.js'),
+            webSecurity: false, // Disable web security to allow local file access
         },
     });
 
@@ -42,6 +102,37 @@ const createWindow = () => {
     mainWindow.on('closed', () => {
         mainWindow = null;
     });
+};
+
+// Debug: Check video files in uploads directory
+const debugCheckUploads = () => {
+    // Check the uploads directory in user data path
+    const uploadsDir = path.join(app.getPath('userData'), 'uploads');
+    console.log('Uploads directory:', uploadsDir);
+
+    if (fs.existsSync(uploadsDir)) {
+        try {
+            const files = fs.readdirSync(uploadsDir);
+            console.log('Files in uploads directory:', files);
+
+            // Check file permissions and sizes
+            files.forEach(file => {
+                const filePath = path.join(uploadsDir, file);
+                const stats = fs.statSync(filePath);
+                let readable = 'yes';
+                try {
+                    fs.accessSync(filePath, fs.constants.R_OK);
+                } catch (err) {
+                    readable = 'no';
+                }
+                console.log(`File ${file}: Size=${stats.size}, Mode=${stats.mode.toString(8)}, Readable=${readable}`);
+            });
+        } catch (err) {
+            console.error('Error reading uploads directory:', err);
+        }
+    } else {
+        console.log('Uploads directory does not exist');
+    }
 };
 
 // Setup window resize handlers for focus mode
@@ -169,11 +260,24 @@ const setupWindowHandlers = () => {
 
 // Set up IPC handlers for todos
 setupTodoIPC();
+// Set up IPC handlers for recordings
+setupRecordingIPC();
+
+// Log important paths for debugging
+console.log('App paths:');
+console.log('__dirname:', __dirname);
+console.log('App path:', app.getAppPath());
+console.log('User data path:', app.getPath('userData'));
 
 // Set up window handlers
 setupWindowHandlers();
 
-app.on('ready', createWindow);
+app.on('ready', () => {
+    // Register custom protocol
+    registerVideoProtocol();
+    createWindow();
+    debugCheckUploads();
+});
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {

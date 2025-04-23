@@ -3,6 +3,7 @@ node_modules/
 
 # Build outputs
 dist/
+out/
 
 # Release packages
 release/
@@ -21,4 +22,9 @@ Thumbs.db
 .idea/
 .vscode/
 *.swp
-*.swo 
+*.swo
+
+# Environment variables
+.env
+.env.local
+.env.* 

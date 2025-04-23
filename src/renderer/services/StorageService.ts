@@ -1,26 +1,5 @@
 import { Todo } from '../models/Todo';
 
-// Define the type for our window.api
-declare global {
-    interface Window {
-        api: {
-            getTodos: () => Promise<Todo[]>;
-            addTodo: (text: string, deadline?: string) => Promise<Todo>;
-            toggleTodo: (id: string) => Promise<Todo>;
-            deleteTodo: (id: string) => Promise<string>;
-            archiveTodo: (id: string) => Promise<Todo>;
-            unarchiveTodo: (id: string) => Promise<Todo>;
-            toggleFocus: (id: string) => Promise<Todo>;
-            setFocus: (id: string) => Promise<Todo>;
-            getFocusedTodos: () => Promise<Todo[]>;
-            editTodo: (id: string, text: string, deadline?: string) => Promise<Todo>;
-            enterFocusMode: (contentHeight: number) => Promise<{ success: boolean; error?: string }>;
-            exitFocusMode: () => Promise<{ success: boolean; error?: string }>;
-            updateFocusModeSize: (contentHeight: number) => Promise<{ success: boolean; error?: string; message?: string }>;
-        };
-    }
-}
-
 export class StorageService {
     async getTodos(): Promise<Todo[]> {
         return await window.api.getTodos();
@@ -34,7 +13,7 @@ export class StorageService {
         return await window.api.toggleTodo(id);
     }
 
-    async deleteTodo(id: string): Promise<string> {
+    async deleteTodo(id: string): Promise<string | boolean> {
         return await window.api.deleteTodo(id);
     }
 

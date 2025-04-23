@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import TodoForm from './TodoForm';
 import TodoList from './TodoList';
+import TodoPage from './pages/TodoPage';
+import WebcamPage from './pages/WebcamPage';
+import NavBar, { Page } from './NavBar';
 import { Todo } from '../models/Todo';
 import { todoController } from '../controllers/TodoController';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,6 +17,7 @@ import {
     faExpandAlt,
     faCompressAlt
 } from '@fortawesome/free-solid-svg-icons';
+import { WebcamProvider } from '../contexts/WebcamContext';
 
 // Define sorting options
 type SortOption = 'deadline' | 'created' | 'text' | 'completed';
@@ -28,6 +32,7 @@ const App: React.FC = () => {
     const [sortAscending, setSortAscending] = useState<boolean>(true);
     const [viewOption, setViewOption] = useState<ViewOption>('active');
     const [focusMode, setFocusMode] = useState<boolean>(false);
+    const [currentPage, setCurrentPage] = useState<Page>('todos');
 
     // Create refs for container and content
     const containerRef = useRef<HTMLDivElement>(null);
@@ -443,120 +448,45 @@ const App: React.FC = () => {
     const { active, archived, total } = getViewStats();
 
     return (
-        <div
-            ref={containerRef}
-            className={`container ${focusMode ? 'focus-mode' : ''}`}
-        >
-            <div className="app-header">
-                <h1 className="app-title">Boost Focus</h1>
-                <button
-                    className="focus-mode-toggle"
-                    onClick={toggleFocusMode}
-                    title={focusMode ? "Exit focus mode" : "Enter focus mode"}
-                >
-                    <FontAwesomeIcon icon={focusMode ? faCompressAlt : faExpandAlt} />
-                </button>
+        <WebcamProvider>
+            <div
+                ref={containerRef}
+                className={`container ${focusMode ? 'focus-mode' : ''}`}
+            >
+                <NavBar
+                    currentPage={currentPage}
+                    onNavigate={setCurrentPage}
+                    focusMode={focusMode}
+                    onToggleFocusMode={toggleFocusMode}
+                />
+
+                {error && <div className="error">{error}</div>}
+
+                {currentPage === 'todos' ? (
+                    <TodoPage
+                        todos={todos}
+                        loading={loading}
+                        error={error}
+                        focusMode={focusMode}
+                        sortBy={sortBy}
+                        sortAscending={sortAscending}
+                        viewOption={viewOption}
+                        getFilteredAndSortedTodos={getFilteredAndSortedTodos}
+                        onAddTodo={handleAddTodo}
+                        onToggle={handleToggleTodo}
+                        onDelete={handleDeleteTodo}
+                        onArchive={handleArchiveTodo}
+                        onUnarchive={handleUnarchiveTodo}
+                        onFocus={handleFocusTodo}
+                        onEdit={handleEditTodo}
+                        onSortChange={handleSortChange}
+                        onViewChange={handleViewChange}
+                    />
+                ) : (
+                    <WebcamPage focusMode={focusMode} />
+                )}
             </div>
-
-            {!focusMode && <TodoForm onAddTodo={handleAddTodo} />}
-
-            {error && <div className="error">{error}</div>}
-
-            {loading ? (
-                <div className="loading">Loading todos...</div>
-            ) : (
-                <>
-                    {!focusMode && (
-                        <div className="list-controls">
-                            <div className="view-controls">
-                                <span className="view-label">View:</span>
-                                <div className="view-buttons">
-                                    <button
-                                        className={`view-button ${viewOption === 'active' ? 'active' : ''}`}
-                                        onClick={() => handleViewChange('active')}
-                                        title="Show active todos"
-                                    >
-                                        Active{active > 0 && ` (${active})`}
-                                    </button>
-                                    <button
-                                        className={`view-button ${viewOption === 'archived' ? 'active' : ''}`}
-                                        onClick={() => handleViewChange('archived')}
-                                        title="Show archived todos"
-                                    >
-                                        Archived{archived > 0 && ` (${archived})`}
-                                    </button>
-                                    <button
-                                        className={`view-button ${viewOption === 'all' ? 'active' : ''}`}
-                                        onClick={() => handleViewChange('all')}
-                                        title="Show all todos"
-                                    >
-                                        All{total > 0 && ` (${total})`}
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div className="sort-controls">
-                                <span className="sort-label">Sort:</span>
-                                <div className="sort-buttons">
-                                    <button
-                                        className={`sort-button ${sortBy === 'deadline' ? 'active' : ''}`}
-                                        onClick={() => handleSortChange('deadline')}
-                                        title={`Sort by deadline ${sortBy === 'deadline' && sortAscending ? '(earliest first)' : '(latest first)'}`}
-                                    >
-                                        <FontAwesomeIcon icon={faClock} />
-                                        {sortBy === 'deadline' && (
-                                            <FontAwesomeIcon icon={sortAscending ? faSortUp : faSortDown} />
-                                        )}
-                                    </button>
-                                    <button
-                                        className={`sort-button ${sortBy === 'created' ? 'active' : ''}`}
-                                        onClick={() => handleSortChange('created')}
-                                        title={`Sort by creation date ${sortBy === 'created' && sortAscending ? '(oldest first)' : '(newest first)'}`}
-                                    >
-                                        <FontAwesomeIcon icon={faCalendarAlt} />
-                                        {sortBy === 'created' && (
-                                            <FontAwesomeIcon icon={sortAscending ? faSortUp : faSortDown} />
-                                        )}
-                                    </button>
-                                    <button
-                                        className={`sort-button ${sortBy === 'text' ? 'active' : ''}`}
-                                        onClick={() => handleSortChange('text')}
-                                        title={`Sort alphabetically ${sortBy === 'text' && sortAscending ? '(A-Z)' : '(Z-A)'}`}
-                                    >
-                                        <FontAwesomeIcon icon={faFont} />
-                                        {sortBy === 'text' && (
-                                            <FontAwesomeIcon icon={sortAscending ? faSortUp : faSortDown} />
-                                        )}
-                                    </button>
-                                    <button
-                                        className={`sort-button ${sortBy === 'completed' ? 'active' : ''}`}
-                                        onClick={() => handleSortChange('completed')}
-                                        title={`Sort by completion status ${sortBy === 'completed' && sortAscending ? '(incomplete first)' : '(complete first)'}`}
-                                    >
-                                        <FontAwesomeIcon icon={faCheckCircle} />
-                                        {sortBy === 'completed' && (
-                                            <FontAwesomeIcon icon={sortAscending ? faSortUp : faSortDown} />
-                                        )}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    <div ref={focusMode ? focusedContentRef : null}>
-                        <TodoList
-                            todos={getFilteredAndSortedTodos()}
-                            onToggle={handleToggleTodo}
-                            onDelete={handleDeleteTodo}
-                            onArchive={handleArchiveTodo}
-                            onUnarchive={handleUnarchiveTodo}
-                            onFocus={handleFocusTodo}
-                            onEdit={handleEditTodo}
-                        />
-                    </div>
-                </>
-            )}
-        </div>
+        </WebcamProvider>
     );
 };
 

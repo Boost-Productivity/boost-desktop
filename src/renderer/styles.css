@@ -578,3 +578,919 @@ html.focus-mode {
         gap: 2px;
     }
 }
+
+/* Webcam Page Styles */
+.webcam-page {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.webcam-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+    /* 16:9 aspect ratio */
+    background-color: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.webcam-container video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+}
+
+.webcam-container video.active {
+    display: block;
+}
+
+.webcam-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 18px;
+}
+
+.webcam-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.webcam-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    background-color: #2c3e50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.webcam-button svg {
+    margin-right: 8px;
+}
+
+.webcam-button:hover {
+    background-color: #1abc9c;
+}
+
+.webcam-button.recording {
+    background-color: #e74c3c;
+}
+
+.webcam-button.recording:hover {
+    background-color: #c0392b;
+}
+
+.webcam-button:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+}
+
+.permission-error {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.8);
+    text-align: center;
+    padding: 20px;
+}
+
+.recording-indicator {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    color: #fff;
+    font-size: 14px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.recording-dot {
+    width: 12px;
+    height: 12px;
+    background-color: #e74c3c;
+    border-radius: 50%;
+    margin-right: 8px;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.save-indicator,
+.save-success {
+    margin-left: 15px;
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.save-indicator {
+    background-color: #3498db;
+    color: #fff;
+}
+
+.save-success {
+    background-color: #2ecc71;
+    color: #fff;
+}
+
+/* Recordings List Styles */
+.recordings-section {
+    margin-top: 30px;
+}
+
+.recordings-section h3 {
+    margin-bottom: 15px;
+    font-size: 20px;
+    color: #2c3e50;
+}
+
+.no-recordings {
+    color: #7f8c8d;
+    font-style: italic;
+}
+
+/* Recordings Table Styles */
+.recordings-list-row {
+    margin-bottom: 30px;
+    overflow-x: auto;
+}
+
+.recordings-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.recordings-table th {
+    text-align: left;
+    padding: 12px 15px;
+    background-color: #f8f9fa;
+    color: #2c3e50;
+    font-weight: 500;
+    border-bottom: 2px solid #ecf0f1;
+}
+
+.recordings-table td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #ecf0f1;
+    vertical-align: middle;
+}
+
+.recording-row {
+    transition: background-color 0.2s;
+}
+
+.recording-row:hover {
+    background-color: #f8f9fa;
+}
+
+.recording-row.selected {
+    background-color: rgba(52, 152, 219, 0.1);
+}
+
+.recording-icon-cell {
+    width: 40px;
+    color: #3498db;
+    text-align: center;
+}
+
+.recording-date-cell {
+    min-width: 150px;
+}
+
+.recording-duration-cell,
+.recording-size-cell {
+    min-width: 80px;
+    white-space: nowrap;
+}
+
+.recording-actions-cell {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.recording-actions-cell .action-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    margin-left: 8px;
+    border-radius: 4px;
+}
+
+.recording-info-bar {
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #2c3e50;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+    .recordings-table {
+        min-width: 600px;
+        /* Ensure we can scroll horizontally on small screens */
+    }
+}
+
+/* Navigation Bar Styles */
+.nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+/* Recording indicator in navbar */
+.navbar-recording-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: rgba(231, 76, 60, 0.9);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    margin-right: 5px;
+    transition: background-color 0.2s;
+}
+
+.navbar-recording-indicator:hover {
+    background-color: rgba(192, 57, 43, 1);
+}
+
+.navbar-recording-indicator .recording-icon {
+    color: white;
+    font-size: 10px;
+    animation: pulse 1s infinite;
+}
+
+.navbar-recording-indicator .recording-time {
+    font-weight: 500;
+}
+
+.nav-button {
+    background: none;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #666;
+    transition: all 0.2s;
+}
+
+.nav-button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.nav-button.active {
+    color: var(--primary-color);
+    background-color: rgba(33, 150, 243, 0.1);
+}
+
+.nav-icon {
+    font-size: 16px;
+}
+
+/* Responsive adjustments for small screens */
+@media (max-width: 480px) {
+    .nav-button span {
+        display: none;
+    }
+
+    .nav-icon {
+        font-size: 18px;
+    }
+
+    .webcam-button span {
+        display: none;
+    }
+}
+
+/* Recording Player Styles */
+.recording-player {
+    margin-top: 30px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.recording-player h4 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #2c3e50;
+}
+
+.selected-recording-video {
+    width: 100%;
+    max-height: 400px;
+    border-radius: 4px;
+    background-color: #000;
+}
+
+.action-button {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    color: #2c3e50;
+}
+
+.action-button:hover {
+    background-color: #ecf0f1;
+}
+
+.play-button:hover {
+    color: #3498db;
+}
+
+.delete-button:hover {
+    color: #e74c3c;
+}
+
+/* Video error message */
+.video-error {
+    padding: 15px;
+    background-color: #ffecec;
+    color: #e74c3c;
+    border-radius: 4px;
+    margin: 10px 0;
+    font-size: 14px;
+}
+
+/* Inline video player styles */
+.video-player-row {
+    background-color: #f8f9fa;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.video-player-row td {
+    padding: 0;
+}
+
+.inline-recording-player {
+    padding: 20px;
+    border-top: 1px solid #e9ecef;
+    animation: expandPlayer 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: top;
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.05);
+}
+
+@keyframes expandPlayer {
+    from {
+        opacity: 0;
+        transform: scaleY(0);
+    }
+
+    to {
+        opacity: 1;
+        transform: scaleY(1);
+    }
+}
+
+.inline-recording-player .recording-info-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background-color: #e9ecef;
+    border-radius: 4px 4px 0 0;
+    color: #2c3e50;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.collapse-video-button {
+    background: none;
+    border: none;
+    color: #6c757d;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.collapse-video-button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #343a40;
+}
+
+.inline-recording-player .selected-recording-video {
+    width: 100%;
+    border-radius: 0 0 4px 4px;
+    background-color: #000;
+    display: block;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-height: 450px;
+}
+
+/* Add transition to the rows for smoother expansion */
+.recordings-table tr {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Make the selected row more prominent */
+.recordings-table tr.selected {
+    background-color: rgba(52, 152, 219, 0.15);
+}
+
+/* Style for play/collapse button toggle */
+.action-button.collapse-button {
+    color: #3498db;
+    background-color: rgba(52, 152, 219, 0.1);
+}
+
+/* Disabled state for buttons during animation */
+.action-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Webcam Page Header Styles */
+.webcam-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.webcam-header h2 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.webcam-header-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.settings-button {
+    background: none;
+    border: none;
+    color: #6c757d;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 18px;
+}
+
+.settings-button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #3498db;
+}
+
+.settings-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Webcam toggle button */
+.webcam-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 95px;
+}
+
+.webcam-toggle.webcam-on {
+    background-color: #e67e22;
+}
+
+.webcam-toggle.webcam-on:hover {
+    background-color: #d35400;
+}
+
+.webcam-toggle.webcam-off {
+    background-color: #3498db;
+}
+
+.webcam-toggle.webcam-off:hover {
+    background-color: #2980b9;
+}
+
+/* Webcam off placeholder */
+.webcam-off-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 40px;
+}
+
+.webcam-off-icon {
+    font-size: 40px;
+    color: #95a5a6;
+    margin-bottom: 10px;
+}
+
+.webcam-off-placeholder p {
+    color: #7f8c8d;
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+/* Focus mode webcam toggle */
+.webcam-controls-focus .webcam-toggle {
+    width: 120px;
+}
+
+/* Settings Modal Styles */
+.settings-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.settings-modal {
+    background-color: white;
+    border-radius: 8px;
+    width: 500px;
+    max-width: 90vw;
+    max-height: 80vh;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    animation: modalSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes modalSlideIn {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.settings-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.settings-header h3 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: #6c757d;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.close-button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #343a40;
+}
+
+.settings-content {
+    padding: 20px;
+    overflow-y: auto;
+    max-height: calc(80vh - 130px);
+}
+
+.settings-section {
+    margin-bottom: 24px;
+}
+
+.settings-section h4 {
+    margin: 0 0 12px 0;
+    color: #2c3e50;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.device-list {
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    max-height: 180px;
+    overflow-y: auto;
+}
+
+.device-item {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.device-item:last-child {
+    border-bottom: none;
+}
+
+.device-item:hover {
+    background-color: #f8f9fa;
+}
+
+.device-item.selected {
+    background-color: rgba(52, 152, 219, 0.1);
+}
+
+.device-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.device-label {
+    font-size: 14px;
+    color: #2c3e50;
+}
+
+.selected-icon {
+    color: #3498db;
+}
+
+.settings-footer {
+    padding: 15px 20px;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.settings-button {
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    min-width: 90px;
+    text-align: center;
+    display: inline-block;
+    line-height: 1.5;
+}
+
+.settings-button.cancel {
+    background: none;
+    border: 1px solid #e9ecef;
+    color: #6c757d;
+}
+
+.settings-button.apply {
+    background-color: #3498db;
+    border: 1px solid #3498db;
+    color: white;
+    font-weight: 500;
+}
+
+.settings-button.cancel:hover {
+    background-color: #f8f9fa;
+}
+
+.settings-button.apply:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+}
+
+/* Webcam Focus Mode Styles */
+.webcam-focus-mode {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.webcam-container-focus {
+    width: 100%;
+    height: calc(100% - 50px);
+    position: relative;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #1a1a1a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.webcam-container-focus video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.webcam-controls-focus {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 0;
+    height: 42px;
+}
+
+.webcam-controls-focus .webcam-button {
+    font-size: 14px;
+    padding: 6px 16px;
+    height: 36px;
+    min-width: 100px;
+    justify-content: center;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.webcam-controls-focus .webcam-button svg {
+    font-size: 16px;
+}
+
+.webcam-controls-focus .record-button {
+    background-color: #2ecc71;
+}
+
+.webcam-controls-focus .record-button:hover {
+    background-color: #27ae60;
+}
+
+.webcam-controls-focus .stop-button {
+    background-color: #e74c3c;
+}
+
+.webcam-controls-focus .stop-button:hover {
+    background-color: #c0392b;
+}
+
+.focus-recording-indicator {
+    top: 10px;
+    right: 10px;
+    padding: 4px 8px;
+    font-size: 12px;
+    background-color: rgba(231, 76, 60, 0.8);
+    border-radius: 4px;
+    color: #fff;
+    font-weight: 500;
+}
+
+.focus-save-indicator {
+    font-size: 12px;
+    margin-left: 8px;
+    background-color: rgba(52, 152, 219, 0.8);
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: #fff;
+}
+
+/* Webcam toggle in settings */
+.webcam-toggle-section {
+    padding: 15px;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    margin-bottom: 24px;
+    background-color: #f8f9fa;
+}
+
+.webcam-toggle-control {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toggle-label {
+    font-weight: 500;
+    color: #2c3e50;
+    font-size: 16px;
+}
+
+.webcam-toggle-control .webcam-button {
+    width: 100%;
+    justify-content: center;
+    padding: 10px;
+    margin-top: 5px;
+}
+
+/* Make on/off buttons more prominent in settings */
+.webcam-toggle-control .webcam-on {
+    background-color: #e74c3c;
+    font-weight: 500;
+}
+
+.webcam-toggle-control .webcam-on:hover {
+    background-color: #c0392b;
+}
+
+.webcam-toggle-control .webcam-off {
+    background-color: #27ae60;
+    font-weight: 500;
+}
+
+.webcam-toggle-control .webcam-off:hover {
+    background-color: #219653;
+}
