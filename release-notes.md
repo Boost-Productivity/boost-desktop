@@ -1,16 +1,21 @@
-# Boost Todo v1.2.1
+# Release Notes v1.3.0
 
 ## New Features
-- Added deadline functionality for todos
-- Implemented deadlines with countdown timer
-- Visual indication for overdue tasks
-- Sound notification when a deadline passes
-- Improved UI for editing deadlines
-- Added focus mode for better productivity
+
+- **Webcam Recording:** Added new webcam recording functionality
+  - Record, save, and manage webcam videos
+  - Video playback within the application
+  - Device selection for cameras and microphones
+  - On/off control via settings panel
+
+- **Focus Mode Enhancement:** 
+  - Ability to use webcam in focus mode
+  - Improved UI transitions between normal and focus modes
+  - Better handling of window size and position in focus mode
 
 ## Improvements
-- Enhanced sorting capabilities (now sorts by deadline)
-- Better visual feedback for todo states
-- Improved task management with archive functionality
-- Fixed packaging issues for macOS distributions
-- Added cross-platform support (macOS, Windows, Linux) 
+
+- Streamlined navigation between todo list and webcam views
+- Improved state management across app transitions
+- Enhanced error handling for media devices
+- Better visual feedback for recording states 

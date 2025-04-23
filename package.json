@@ -1,6 +1,6 @@
 {
-  "name": "boost-desktop",
-  "version": "1.2.3",
+  "name": "boost-productivity",
+  "version": "1.3.0",
   "description": "Simple desktop to-do list application",
   "main": "dist/main.js",
   "scripts": {
