@@ -5,6 +5,7 @@ import { setupTodoIPC } from './todoService';
 import { setupRecordingIPC } from './recordingService';
 import { setupPythonServerIPC } from './pythonServerIPC';
 import { pythonServer } from './pythonServer';
+import { CouchDBManager } from './couchdbManager';
 import * as fs from 'fs';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling
@@ -15,6 +16,9 @@ if (require('electron-squirrel-startup')) {
 let mainWindow: BrowserWindow | null = null;
 let originalSize: { width: number; height: number } | null = null;
 let originalPosition: { x: number; y: number } | null = null;
+
+// Create a CouchDB manager instance
+export const couchdbManager = new CouchDBManager();
 
 const createWindow = () => {
     // Create the browser window
@@ -231,6 +235,24 @@ console.log('User data path:', app.getPath('userData'));
 setupWindowHandlers();
 
 app.on('ready', async () => {
+    // Start CouchDB before anything else
+    try {
+        console.log('Starting CouchDB...');
+        const couchdbStarted = await couchdbManager.start();
+        if (couchdbStarted) {
+            console.log('CouchDB started successfully');
+
+            // Set environment variables for Python process
+            process.env.COUCHDB_URL = couchdbManager.getUrl();
+            process.env.COUCHDB_USER = couchdbManager.getCredentials().username;
+            process.env.COUCHDB_PASSWORD = couchdbManager.getCredentials().password;
+        } else {
+            console.error('Failed to start CouchDB');
+        }
+    } catch (error) {
+        console.error('Error starting CouchDB:', error);
+    }
+
     createWindow();
     debugCheckUploads();
 
@@ -252,6 +274,9 @@ app.on('window-all-closed', () => {
     // Stop the Python server when all windows are closed
     pythonServer.stop();
 
+    // Stop CouchDB
+    couchdbManager.stop();
+
     if (process.platform !== 'darwin') {
         app.quit();
     }
@@ -260,6 +285,9 @@ app.on('window-all-closed', () => {
 app.on('will-quit', () => {
     // Make sure to stop the Python server when the app is quitting
     pythonServer.stop();
+
+    // Stop CouchDB when quitting
+    couchdbManager.stop();
 });
 
 app.on('activate', () => {

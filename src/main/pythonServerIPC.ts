@@ -61,7 +61,6 @@ export function setupPythonServerIPC() {
     ipcMain.handle('python-server-request', async (_, method, endpoint, data) => {
         try {
             const url = `${pythonServer.getServerUrl()}${endpoint}`;
-            console.log(`Making ${method} request to ${url}`);
 
             let response;
             if (method.toLowerCase() === 'get') {
@@ -74,18 +73,12 @@ export function setupPythonServerIPC() {
                 throw new Error(`Unsupported method: ${method}`);
             }
 
-            console.log(`Response from ${url}: Status ${response.status}`);
             return {
                 success: true,
                 data: response.data
             };
         } catch (error) {
-            console.error(`Error making ${method} request to ${pythonServer.getServerUrl()}${endpoint}:`, error);
-            // Add more detailed error information
-            if (error.response) {
-                console.error(`Response status: ${error.response.status}`);
-                console.error(`Response data:`, error.response.data);
-            }
+            console.error(`Error in ${method} request to ${endpoint}:`, error.message);
             return {
                 success: false,
                 error: String(error)

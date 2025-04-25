@@ -1546,7 +1546,7 @@ html.focus-mode {
 }
 
 .flow-sidebar-header button {
-    background-color: #4f46e5;
+    background-color: #2196f3;
     color: white;
     border: none;
     border-radius: 6px;
@@ -1560,7 +1560,7 @@ html.focus-mode {
 }
 
 .flow-sidebar-header button:hover {
-    background-color: #4338ca;
+    background-color: #0b7dda;
 }
 
 .flow-list {
@@ -1589,8 +1589,8 @@ html.focus-mode {
 }
 
 .flow-list-item.active {
-    background-color: #ede9fe;
-    border-left-color: #4f46e5;
+    background-color: #e3f2fd;
+    border-left-color: #2196f3;
 }
 
 .flow-list-item-content {
@@ -1641,7 +1641,7 @@ html.focus-mode {
 
 .flow-list-item-action:hover {
     background-color: rgba(0, 0, 0, 0.05);
-    color: #4f46e5;
+    color: #2196f3;
 }
 
 .flow-list-item-action.delete:hover {
@@ -1660,7 +1660,7 @@ html.focus-mode {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #4f46e5;
+    background-color: #2196f3;
     color: white;
     font-size: 13px;
     font-weight: 500;
@@ -1673,7 +1673,7 @@ html.focus-mode {
 }
 
 .flow-add-button:hover {
-    background-color: #4338ca;
+    background-color: #0b7dda;
 }
 
 /* Custom scrollbar */
@@ -1710,37 +1710,42 @@ html.focus-mode {
 }
 
 .flow-page .react-flow__node.selected {
-    box-shadow: 0 0 0 2px #4f46e5;
+    box-shadow: 0 0 0 2px #2196f3;
 }
 
+/* Update ReactFlow handle styles for better positioning and visibility */
 .flow-page .react-flow__handle {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background-color: #4f46e5;
+    background-color: #2196f3;
     border: 2px solid white;
+    transition: none !important;
+    z-index: 10;
 }
 
 .flow-page .react-flow__handle:hover {
-    background-color: #6366f1;
-    transform: scale(1.2);
+    background-color: #0b7dda;
+    transform: scale(1.3);
 }
 
 .flow-page .react-flow__handle-top {
-    top: -4px;
+    transition: none !important;
+    transform: translate(-50%, -50%) !important;
 }
 
 .flow-page .react-flow__handle-bottom {
-    bottom: -4px;
+    transition: none !important;
+    transform: translate(-50%, 50%) !important;
 }
 
 .flow-page .react-flow__edge-path {
-    stroke: #4f46e5;
+    stroke: #2196f3;
     stroke-width: 2;
 }
 
 .flow-page .react-flow__edge.selected .react-flow__edge-path {
-    stroke: #a855f7;
+    stroke: #64b5f6;
     stroke-width: 3;
 }
 
@@ -1771,5 +1776,64 @@ html.focus-mode {
 
 .flow-toolbar button:hover {
     background: #f3f4f6;
-    color: #4f46e5;
+    color: #2196f3;
+}
+
+/* FlowNode Component Styles */
+.flow-node {
+    transition: all 0.2s;
+    position: relative;
+}
+
+.flow-node .inputWrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    margin: 4px 0;
+    position: relative;
+}
+
+.flow-node .dragHandle {
+    cursor: grab;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.flow-node .dragHandle:hover {
+    opacity: 1;
+}
+
+.flow-node-action {
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: none;
+    border: none;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.2s;
+    opacity: 0.7;
+}
+
+.flow-node:hover .flow-node-action {
+    opacity: 1;
+}
+
+.flow-node-action:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #2196f3;
+}
+
+.flow-node-action.delete:hover {
+    color: #ef4444;
+    background-color: #fee2e2;
 }

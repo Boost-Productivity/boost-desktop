@@ -32,11 +32,6 @@ class PythonServer {
                 throw new Error(`Server script not found at ${serverScriptPath}`);
             }
 
-            // Print the server script content to check for /api/flows endpoint
-            console.log('Server script content:');
-            const serverScript = fs.readFileSync(serverScriptPath, 'utf8');
-            console.log(serverScript);
-
             // Start the Python process
             console.log(`Starting Python server with command: ${pythonCommand} ${serverScriptPath} ${this.port}`);
             this.process = spawn(pythonCommand, [serverScriptPath, this.port.toString()], {
@@ -47,12 +42,10 @@ class PythonServer {
             // Set up logging for stdout and stderr
             if (this.process.stdout) {
                 this.process.stdout.on('data', (data) => {
+                    // Only log critical messages, not every single output line
                     const output = data.toString().trim();
-                    console.log(`Python server stdout: ${output}`);
-
-                    // Look for specific messages about the /api/flows endpoint
-                    if (output.includes('/api/flows')) {
-                        console.log('Found /api/flows output:', output);
+                    if (output.includes('ERROR') || output.includes('CRITICAL')) {
+                        console.log(`Python server error: ${output}`);
                     }
                 });
             }

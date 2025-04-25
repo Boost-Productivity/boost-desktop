@@ -1,1 +1,6 @@
-flask 
+flask
+ariadne
+couchdb
+python-dotenv
+flask-cors
+requests 
