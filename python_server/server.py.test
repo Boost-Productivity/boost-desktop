@@ -1,0 +1,52 @@
+from flask import Flask, jsonify
+import sys
+import logging
+
+# Set up logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+
+app = Flask(__name__)
+
+# Basic test endpoint
+@app.route('/api/test', methods=['GET'])
+def test():
+    logging.info("Test endpoint called")
+    return jsonify({"status": "test-success"})
+
+# Health check endpoint
+@app.route('/api/health', methods=['GET'])
+def health_check():
+    logging.info("Health check requested")
+    return jsonify({"status": "running"})
+
+# Simple flows endpoint that always returns sample data
+@app.route('/api/flows', methods=['GET'])
+def get_flows():
+    logging.info("GET /api/flows called on TEST server")
+    # Return a simple array with one flow
+    sample_flow = {
+        "id": "test-flow-1",
+        "name": "Test Flow",
+        "nodes": [],
+        "edges": [],
+        "createdAt": "2023-01-01T00:00:00.000Z",
+        "updatedAt": "2023-01-01T00:00:00.000Z"
+    }
+    return jsonify([sample_flow])
+
+# Make the test file runnable
+if __name__ == '__main__':
+    # Get port from command line arguments or use default
+    port = int(sys.argv[1]) if len(sys.argv) > 1 else 5000
+    
+    # Log startup
+    logging.info(f"Starting TEST Python server on port {port}")
+    
+    # Run the Flask app
+    app.run(host='127.0.0.1', port=port, debug=False) 

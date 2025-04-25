@@ -1,9 +1,9 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faList, faVideo, faExpandAlt, faCompressAlt } from '@fortawesome/free-solid-svg-icons';
+import { faList, faVideo, faExpandAlt, faCompressAlt, faServer } from '@fortawesome/free-solid-svg-icons';
 import { RecordingIndicator, useWebcam } from '../contexts/WebcamContext';
 
-export type Page = 'todos' | 'webcam';
+export type Page = 'todos' | 'webcam' | 'python' | 'flow';
 
 interface NavBarProps {
     currentPage: Page;
@@ -57,6 +57,20 @@ const NavBar: React.FC<NavBarProps> = ({
                     >
                         <FontAwesomeIcon icon={faVideo} className="nav-icon" />
                         <span>Webcam</span>
+                    </button>
+                    <button
+                        className={`nav-button ${currentPage === 'python' ? 'active' : ''}`}
+                        onClick={() => handleNavigate('python')}
+                    >
+                        <FontAwesomeIcon icon={faServer} className="nav-icon" />
+                        <span>Python</span>
+                    </button>
+                    <button
+                        className={`nav-button ${currentPage === 'flow' ? 'active' : ''}`}
+                        onClick={() => handleNavigate('flow')}
+                    >
+                        <FontAwesomeIcon icon={faServer} className="nav-icon" />
+                        <span>Flow</span>
                     </button>
                 </div>
                 <button

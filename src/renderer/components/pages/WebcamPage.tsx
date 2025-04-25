@@ -3,15 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle, faStop, faTrash, faPlay, faVideo, faTimes, faExpand, faCompress, faCog, faCheck, faPowerOff, faVideoSlash } from '@fortawesome/free-solid-svg-icons';
 import { useWebcam } from '../../contexts/WebcamContext';
 
-interface Recording {
-    id: string;
-    filename: string;
-    createdAt: string;
-    duration: number;
-    fileSize: number;
-    processed: boolean;
-}
-
 interface MediaDevice {
     deviceId: string;
     kind: string;
@@ -371,10 +362,10 @@ const WebcamPage: React.FC<WebcamPageProps> = ({ focusMode = false }) => {
                                                 {formatDate(recording.createdAt)}
                                             </td>
                                             <td className="recording-duration-cell">
-                                                {formatTime(recording.duration)}
+                                                {recording.duration !== undefined ? formatTime(recording.duration) : 'N/A'}
                                             </td>
                                             <td className="recording-size-cell">
-                                                {formatFileSize(recording.fileSize)}
+                                                {recording.fileSize !== undefined ? formatFileSize(recording.fileSize) : 'N/A'}
                                             </td>
                                             <td className="recording-actions-cell">
                                                 <button

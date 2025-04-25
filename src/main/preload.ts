@@ -28,5 +28,12 @@ contextBridge.exposeInMainWorld(
 
     // Native recording methods (replacing Python-based recording)
     saveRecording: (buffer: Uint8Array, outputFormat?: string) => ipcRenderer.invoke('saveRecording', buffer, outputFormat),
+
+    // Python server methods
+    pythonServerStatus: () => ipcRenderer.invoke('python-server-status'),
+    pythonServerStart: () => ipcRenderer.invoke('python-server-start'),
+    pythonServerStop: () => ipcRenderer.invoke('python-server-stop'),
+    pythonServerRequest: (method: string, endpoint: string, data?: any) =>
+        ipcRenderer.invoke('python-server-request', method, endpoint, data),
 }
 ); 

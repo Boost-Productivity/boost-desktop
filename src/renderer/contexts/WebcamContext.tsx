@@ -2,15 +2,17 @@ import React, { createContext, useContext, useState, useEffect, useRef, useCallb
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle, faStop } from '@fortawesome/free-solid-svg-icons';
 
-// Define types
-interface Recording {
+// Use the Recording interface from global type declarations
+type Recording = {
     id: string;
     filename: string;
+    path: string;
     createdAt: string;
-    duration: number;
-    fileSize: number;
-    processed: boolean;
-}
+    thumbnailPath?: string;
+    duration?: number;
+    fileSize?: number;
+    processed?: boolean;
+};
 
 interface MediaDevice {
     deviceId: string;

@@ -5,6 +5,7 @@
   "main": "dist/main.js",
   "scripts": {
     "start": "electron .",
+    "prebuild": "mkdir -p node_modules/electron/dist/Electron.app/Contents/Resources/python_server && cp -r python_server/* node_modules/electron/dist/Electron.app/Contents/Resources/python_server/",
     "build": "webpack --mode production",
     "build:watch": "webpack --mode development --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -20,13 +21,15 @@
   "author": "Your Name <your.email@example.com>",
   "license": "ISC",
   "dependencies": {
+    "@xyflow/react": "^12.6.0",
     "axios": "^1.8.4",
     "electron-squirrel-startup": "^1.0.1",
     "electron-store": "^10.0.1",
     "fluent-ffmpeg": "^2.1.3",
     "form-data": "^4.0.2",
     "node-thumbnail": "^0.15.0",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.8.0",
@@ -48,9 +51,12 @@
     "@types/react-dom": "^19.1.2",
     "@types/uuid": "^10.0.0",
     "appdmg": "^0.6.6",
+    "assert": "^2.1.0",
+    "buffer": "^6.0.3",
     "concurrently": "^9.1.2",
     "copy-webpack-plugin": "^13.0.0",
     "cross-env": "^7.0.3",
+    "crypto-browserify": "^3.12.1",
     "css-loader": "^7.1.2",
     "electron": "^35.1.5",
     "electron-builder": "^24.13.1",
@@ -58,11 +64,15 @@
     "electron-reload": "^2.0.0-alpha.1",
     "ffmpeg-static": "^5.1.0",
     "html-webpack-plugin": "^5.6.3",
+    "path-browserify": "^1.0.1",
+    "process": "^0.11.10",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "stream-browserify": "^3.0.0",
     "style-loader": "^4.0.0",
     "ts-loader": "^9.5.2",
     "typescript": "^5.8.3",
+    "util": "^0.12.5",
     "wait-on": "^8.0.3",
     "webpack": "^5.99.5",
     "webpack-cli": "^6.0.1"
@@ -72,13 +82,15 @@
     "productName": "Boost Todo",
     "asar": true,
     "asarUnpack": [
-      "node_modules/ffmpeg-static/**/*"
+      "node_modules/ffmpeg-static/**/*",
+      "python_server/**/*"
     ],
     "compression": "maximum",
     "files": [
       "dist/**/*",
       "assets/**/*",
       "video-processor/**/*",
+      "python_server/**/*",
       "package.json",
       "node_modules/ffmpeg-static/**/*"
     ],

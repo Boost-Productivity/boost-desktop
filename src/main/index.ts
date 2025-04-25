@@ -3,6 +3,8 @@ import * as path from 'path';
 import * as url from 'url';
 import { setupTodoIPC } from './todoService';
 import { setupRecordingIPC } from './recordingService';
+import { setupPythonServerIPC } from './pythonServerIPC';
+import { pythonServer } from './pythonServer';
 import * as fs from 'fs';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling
@@ -216,6 +218,8 @@ const setupWindowHandlers = () => {
 setupTodoIPC();
 // Set up IPC handlers for recordings
 setupRecordingIPC();
+// Set up IPC handlers for Python server
+setupPythonServerIPC();
 
 // Log important paths for debugging
 console.log('App paths:');
@@ -226,15 +230,36 @@ console.log('User data path:', app.getPath('userData'));
 // Set up window handlers
 setupWindowHandlers();
 
-app.on('ready', () => {
+app.on('ready', async () => {
     createWindow();
     debugCheckUploads();
+
+    // Start the Python server
+    try {
+        console.log('Starting Python server...');
+        const started = await pythonServer.start();
+        if (started) {
+            console.log('Python server started successfully');
+        } else {
+            console.error('Failed to start Python server');
+        }
+    } catch (error) {
+        console.error('Error starting Python server:', error);
+    }
 });
 
 app.on('window-all-closed', () => {
+    // Stop the Python server when all windows are closed
+    pythonServer.stop();
+
     if (process.platform !== 'darwin') {
         app.quit();
     }
+});
+
+app.on('will-quit', () => {
+    // Make sure to stop the Python server when the app is quitting
+    pythonServer.stop();
 });
 
 app.on('activate', () => {

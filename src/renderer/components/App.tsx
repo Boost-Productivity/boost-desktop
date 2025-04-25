@@ -3,6 +3,8 @@ import TodoForm from './TodoForm';
 import TodoList from './TodoList';
 import TodoPage from './pages/TodoPage';
 import WebcamPage from './pages/WebcamPage';
+import PythonServerTest from './pages/PythonServerTest';
+import FlowPage from './pages/FlowPage';
 import NavBar, { Page } from './NavBar';
 import { Todo } from '../models/Todo';
 import { todoController } from '../controllers/TodoController';
@@ -482,9 +484,13 @@ const App: React.FC = () => {
                         onSortChange={handleSortChange}
                         onViewChange={handleViewChange}
                     />
-                ) : (
+                ) : currentPage === 'webcam' ? (
                     <WebcamPage focusMode={focusMode} />
-                )}
+                ) : currentPage === 'flow' ? (
+                    <FlowPage />
+                ) : currentPage === 'python' ? (
+                    <PythonServerTest />
+                ) : null}
             </div>
         </WebcamProvider>
     );
