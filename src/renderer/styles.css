@@ -1985,3 +1985,418 @@ html.focus-mode {
     max-height: 120px;
     overflow-y: auto;
 }
+
+/* Node Type Selector */
+.type-selector-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.node-type-selector {
+    background-color: white;
+    border-radius: 8px;
+    width: 300px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.node-type-selector-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.node-type-selector-header h3 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.node-type-list {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.node-type-option {
+    padding: 12px 15px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 15px;
+    color: #2c3e50;
+    transition: all 0.2s;
+}
+
+.node-type-option:hover {
+    background-color: #e3f2fd;
+    border-color: #2196f3;
+}
+
+/* Journal Entry Node */
+.journal-entry-node .flow-node-header {
+    background-color: #e3f2fd;
+}
+
+.journal-entry-textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    resize: vertical;
+    min-height: 80px;
+    font-size: 14px;
+}
+
+.journal-entry-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.journal-text {
+    white-space: pre-wrap;
+    font-size: 14px;
+    color: #4b5563;
+    margin: 0;
+    padding: 8px;
+    background-color: #f9fafb;
+    border-radius: 6px;
+    min-height: 60px;
+}
+
+.journal-placeholder {
+    color: #a0aec0;
+    font-style: italic;
+    padding: 8px;
+}
+
+.journal-date {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #6b7280;
+    text-align: right;
+}
+
+/* Meditation Timer Node */
+.meditation-timer-node .flow-node-header {
+    background-color: #e8f5e9;
+}
+
+.meditation-timer-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.meditation-time {
+    font-size: 28px;
+    font-weight: 500;
+    color: #333;
+    padding: 8px 16px;
+    background-color: #f4f7f9;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.meditation-duration-label {
+    font-size: 14px;
+    color: #666;
+    cursor: pointer;
+}
+
+.meditation-duration-edit {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.meditation-duration-input {
+    padding: 6px 10px;
+    width: 60px;
+    text-align: center;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+}
+
+.meditation-duration-unit {
+    font-size: 14px;
+    color: #666;
+}
+
+.meditation-controls {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    justify-content: center;
+}
+
+.meditation-start-button {
+    background-color: #4caf50;
+}
+
+.meditation-start-button:hover {
+    background-color: #388e3c;
+}
+
+.meditation-stop-button {
+    background-color: #f44336;
+}
+
+.meditation-stop-button:hover {
+    background-color: #d32f2f;
+}
+
+.meditation-reset-button {
+    background-color: #9e9e9e;
+}
+
+.meditation-reset-button:hover {
+    background-color: #757575;
+}
+
+.meditation-reset-button:disabled {
+    background-color: #e0e0e0;
+    cursor: not-allowed;
+}
+
+.meditation-status {
+    margin-top: 12px;
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+}
+
+/* Fitness Agent Node */
+.fitness-agent-node .flow-node-header {
+    background-color: #fff8e1;
+}
+
+.fitness-exercise-list {
+    margin-top: 12px;
+}
+
+.fitness-no-exercises {
+    padding: 12px;
+    color: #a0aec0;
+    text-align: center;
+    font-style: italic;
+    background-color: #f9fafb;
+    border-radius: 6px;
+}
+
+.fitness-exercises {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 12px 0;
+}
+
+.fitness-exercise-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: #f9fafb;
+    border-radius: 6px;
+    margin-bottom: 6px;
+}
+
+.fitness-exercise-item.completed {
+    opacity: 0.7;
+}
+
+.fitness-exercise-item.completed .fitness-exercise-name {
+    text-decoration: line-through;
+    color: #9e9e9e;
+}
+
+.fitness-exercise-checkbox {
+    margin-right: 10px;
+}
+
+.fitness-exercise-details {
+    flex: 1;
+}
+
+.fitness-exercise-name {
+    font-weight: 500;
+    color: #333;
+}
+
+.fitness-exercise-meta {
+    font-size: 12px;
+    color: #666;
+    margin-top: 2px;
+}
+
+.fitness-exercise-delete {
+    color: #f44336;
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.fitness-exercise-delete:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.fitness-add-exercise-button,
+.fitness-add-notes-button {
+    width: 100%;
+    padding: 8px;
+    background: none;
+    border: 1px dashed #d1d5db;
+    border-radius: 6px;
+    color: #6b7280;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: all 0.2s;
+    font-size: 13px;
+}
+
+.fitness-add-exercise-button:hover,
+.fitness-add-notes-button:hover {
+    color: #2196f3;
+    border-color: #2196f3;
+    background-color: #f0f7ff;
+}
+
+.fitness-add-exercise-form {
+    background-color: #f9fafb;
+    border-radius: 6px;
+    padding: 12px;
+    margin-top: 6px;
+}
+
+.fitness-exercise-name-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.fitness-exercise-params {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.fitness-param-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.fitness-param-input {
+    width: 50px;
+    padding: 4px 8px;
+    text-align: center;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+}
+
+.fitness-form-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.fitness-notes-edit {
+    margin-top: 12px;
+}
+
+.fitness-notes-textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    resize: vertical;
+    min-height: 60px;
+    font-size: 14px;
+}
+
+.fitness-notes-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.fitness-notes-display {
+    margin-top: 12px;
+    padding: 8px;
+    background-color: #f9fafb;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.fitness-notes-label {
+    font-weight: 500;
+    color: #4b5563;
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.fitness-notes-text {
+    font-size: 13px;
+    color: #4b5563;
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+/* Button style overrides for different node types */
+.journal-save-button,
+.fitness-save-button {
+    background-color: #4caf50;
+}
+
+.journal-save-button:hover,
+.fitness-save-button:hover {
+    background-color: #388e3c;
+}
+
+.journal-cancel-button,
+.fitness-cancel-button {
+    background-color: #f44336;
+}
+
+.journal-cancel-button:hover,
+.fitness-cancel-button:hover {
+    background-color: #d32f2f;
+}
+
+.fitness-add-button {
+    background-color: #2196f3;
+}
+
+.fitness-add-button:hover {
+    background-color: #0b7dda;
+}
+
+.fitness-add-button:disabled {
+    background-color: #e0e0e0;
+    cursor: not-allowed;
+}

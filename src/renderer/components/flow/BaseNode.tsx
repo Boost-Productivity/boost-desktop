@@ -5,6 +5,7 @@ export interface BaseNodeData {
     label?: string;
     description?: string;
     content?: string;
+    type?: string;
 }
 
 export interface BaseNodeProps {

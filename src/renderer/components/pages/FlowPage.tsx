@@ -13,13 +13,9 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import useFlowStore from '../../lib/flowStore';
-import FlowNode from '../flow/FlowNode';
+import { nodeTypes } from '../flow/nodeRegistry';
+import NodeTypeSelector from '../flow/NodeTypeSelector';
 import { PythonServerService } from '../../services/PythonServerService';
-
-// Define node types
-const nodeTypes = {
-    default: FlowNode
-};
 
 // Flow Sidebar Component
 const FlowSidebar = () => {
@@ -138,6 +134,9 @@ const Flow = () => {
         saveFlow
     } = useFlowStore();
 
+    const [showTypeSelector, setShowTypeSelector] = useState(false);
+    const [nodePlacementPosition, setNodePlacementPosition] = useState({ x: 0, y: 0 });
+
     // Use React Flow's optimized state hooks
     const [nodes, setNodes, onNodesChange] = useNodesState(storeNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(storeEdges);
@@ -174,8 +173,16 @@ const Flow = () => {
             y: window.innerHeight / 2
         });
 
-        addNode(center, 'New Node');
-    }, [reactFlowInstance, addNode]);
+        // Store position and show selector
+        setNodePlacementPosition(center);
+        setShowTypeSelector(true);
+    }, [reactFlowInstance]);
+
+    // Handle node type selection
+    const handleNodeTypeSelect = useCallback((type: string) => {
+        addNode(nodePlacementPosition, type);
+        setShowTypeSelector(false);
+    }, [addNode, nodePlacementPosition]);
 
     return (
         <div className="flow-editor">
@@ -191,7 +198,7 @@ const Flow = () => {
                 defaultEdgeOptions={{ type: 'default', animated: true }}
                 proOptions={{ hideAttribution: true }}
                 fitView
-                style={{ background: '#f8f8f8', width: '100%', height: '100%' }} // Add background color to make the canvas visible
+                style={{ background: '#f8f8f8', width: '100%', height: '100%' }}
             >
                 <Background color="#aaa" gap={16} />
                 <Controls />
@@ -219,6 +226,16 @@ const Flow = () => {
                     </button>
                 </Panel>
             </ReactFlow>
+
+            {/* Node Type Selector Modal */}
+            {showTypeSelector && (
+                <div className="type-selector-overlay">
+                    <NodeTypeSelector
+                        onSelectType={handleNodeTypeSelect}
+                        onCancel={() => setShowTypeSelector(false)}
+                    />
+                </div>
+            )}
         </div>
     );
 };

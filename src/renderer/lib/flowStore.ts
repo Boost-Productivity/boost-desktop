@@ -5,6 +5,7 @@ import {
     Connection
 } from '@xyflow/react';
 import { FlowService } from '../services/FlowService';
+import { NODE_TYPES } from '../components/flow/nodeRegistry';
 
 // Simple random ID generator (doesn't rely on Node.js crypto)
 function generateId() {
@@ -41,7 +42,7 @@ interface FlowState {
     deleteFlow: (flowId: string) => Promise<void>;
 
     // Node operations
-    addNode: (position: { x: number, y: number }, label?: string) => void;
+    addNode: (position: { x: number, y: number }, type?: string, label?: string) => void;
     updateNode: (nodeId: string, data: any) => void;
     deleteNode: (nodeId: string) => void;
     selectNode: (nodeId: string | null) => void;
@@ -251,12 +252,18 @@ const useFlowStore = create<FlowState>((set, get) => ({
     },
 
     // Node operations
-    addNode: (position, label = 'New Node') => {
+    addNode: (position, type = NODE_TYPES.DEFAULT, label = 'New Node') => {
         const newNode = {
             id: `node-${generateId()}`,
-            type: 'default',
+            type,
             position,
-            data: { label }
+            data: {
+                label,
+                type,
+                ...(type === NODE_TYPES.JOURNAL_ENTRY ? { journalText: '', date: new Date().toISOString() } : {}),
+                ...(type === NODE_TYPES.MEDITATION_TIMER ? { duration: 5, completed: false } : {}),
+                ...(type === NODE_TYPES.FITNESS_AGENT ? { exercises: [], notes: '' } : {})
+            }
         };
 
         set(state => ({
